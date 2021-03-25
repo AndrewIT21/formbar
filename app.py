@@ -6,7 +6,6 @@ import time, math
 import netifaces as ni
 ni.ifaddresses('eth0')
 ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
-quizCSV = ''
 
 #import pyttsx3
 #engine = pyttsx3.init()
@@ -336,15 +335,12 @@ def endpoint_color():
 @app.route('/settings', methods = ['POST', 'GET'])
 def settings():
     global ipList
-    global quizCSV
     if settingsBoolDict['locked']:
         if request.remote_addr not in whiteList:
             return "STAHP DOING THE SNEAKY HACKERINGS!"
 
     ipList = {}
     if request.method == 'POST':
-        quizCSV = request.form['quizCSV']
-        print(quizCSV)
         quizQuestion = request.form['qQuestion']
         quizCorrect = int(request.form['quizlet'])
         quizAnswers = [request.form['qaAnswer'], request.form['qbAnswer'], request.form['qcAnswer'], request.form['qdAnswer']]
@@ -563,10 +559,6 @@ def endpoint_getpix():
 @app.route('/virtualbar')
 def endpoint_virtualbar():
     return render_template("virtualbar.html",  serverIp = ip)
-
-@app.route('/kahoots')
-def endpoint_kahoots():
-    return render_template("kahoots.html",  quizCSV = quizCSV)
 
 @app.route('/hangman')
 def endpoint_hangman():
